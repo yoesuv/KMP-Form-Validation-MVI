@@ -1,11 +1,5 @@
 package com.yoesuv.kmpformvalidationmvi.utils.validation
 
-import androidx.compose.runtime.Composable
-import kmpformvalidationmvi.composeapp.generated.resources.Res
-import kmpformvalidationmvi.composeapp.generated.resources.password_required
-import kmpformvalidationmvi.composeapp.generated.resources.password_too_short
-import org.jetbrains.compose.resources.stringResource
-
 /**
  * Extension function to validate password with string parameters
  * @param passwordRequiredMessage Message to show when password is required
@@ -32,16 +26,4 @@ fun String.validatePassword(
             message = ""
         )
     }
-}
-
-/**
- * Composable extension function to validate password with compose string resources
- * @return ValidationModel with validation result and localized message
- */
-@Composable
-fun String.validatePasswordComposable(): ValidationModel {
-    return this.validatePassword(
-        passwordRequiredMessage = stringResource(Res.string.password_required),
-        passwordTooShortMessage = stringResource(Res.string.password_too_short)
-    )
 }
