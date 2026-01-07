@@ -13,11 +13,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yoesuv.kmpformvalidationmvi.feature.components.AppButton
 import com.yoesuv.kmpformvalidationmvi.feature.components.AppPasswordField
 import com.yoesuv.kmpformvalidationmvi.feature.components.AppTextField
@@ -48,8 +51,6 @@ import org.jetbrains.compose.resources.stringResource
 fun RegisterScreen(
     onNavigateBack: () -> Unit = {},
 ) {
-
-    // String resources for validation messages
     val fullNameRequiredMessage = stringResource(Res.string.full_name_required)
     val fullNameTooShortMessage = stringResource(Res.string.full_name_too_short)
     val emailRequiredMessage = stringResource(Res.string.email_required)
@@ -58,6 +59,20 @@ fun RegisterScreen(
     val passwordTooShortMessage = stringResource(Res.string.password_too_short)
     val confirmPasswordRequiredMessage = stringResource(Res.string.confirm_password_required)
     val passwordsDoNotMatchMessage = stringResource(Res.string.passwords_do_not_match)
+
+    val viewModel: RegisterViewModel = viewModel {
+        RegisterViewModel(
+            fullNameRequiredMessage = fullNameRequiredMessage,
+            fullNameTooShortMessage = fullNameTooShortMessage,
+            emailRequiredMessage = emailRequiredMessage,
+            emailInvalidMessage = emailInvalidMessage,
+            passwordRequiredMessage = passwordRequiredMessage,
+            passwordTooShortMessage = passwordTooShortMessage,
+            confirmPasswordRequiredMessage = confirmPasswordRequiredMessage,
+            passwordsDoNotMatchMessage = passwordsDoNotMatchMessage
+        )
+    }
+    val state by viewModel.state.collectAsState()
 
     Scaffold { paddingValues ->
         Column(
@@ -81,58 +96,58 @@ fun RegisterScreen(
 
             // Full Name Field
             AppTextField(
-                value = "",
-                onValueChange = {
-
+                value = state.fullName,
+                onValueChange = { newFullName ->
+                    viewModel.onIntent(RegisterIntent.FullNameChanged(newFullName))
                 },
                 label = stringResource(Res.string.full_name_label),
                 placeholder = stringResource(Res.string.full_name_placeholder),
                 keyboardType = KeyboardType.Text,
-                isError = false,
-                errorMessage = null
+                isError = state.fullNameError != null,
+                errorMessage = state.fullNameError
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Email Field
             AppTextField(
-                value = "",
-                onValueChange = {
-
+                value = state.email,
+                onValueChange = { newEmail ->
+                    viewModel.onIntent(RegisterIntent.EmailChanged(newEmail))
                 },
                 label = stringResource(Res.string.email_label),
                 placeholder = stringResource(Res.string.email_placeholder),
                 keyboardType = KeyboardType.Email,
-                isError = false,
-                errorMessage = null
+                isError = state.emailError != null,
+                errorMessage = state.emailError
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Password Field
             AppPasswordField(
-                value = "",
-                onValueChange = {
-
+                value = state.password,
+                onValueChange = { newPassword ->
+                    viewModel.onIntent(RegisterIntent.PasswordChanged(newPassword))
                 },
                 label = stringResource(Res.string.password_label),
                 placeholder = stringResource(Res.string.password_placeholder),
-                isError = false,
-                errorMessage = null
+                isError = state.passwordError != null,
+                errorMessage = state.passwordError
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Confirm Password Field
             AppPasswordField(
-                value = "",
-                onValueChange = {
-
+                value = state.confirmPassword,
+                onValueChange = { newConfirmPassword ->
+                    viewModel.onIntent(RegisterIntent.ConfirmPasswordChanged(newConfirmPassword))
                 },
                 label = stringResource(Res.string.confirm_password_label),
                 placeholder = stringResource(Res.string.confirm_password_placeholder),
-                isError = false,
-                errorMessage = null
+                isError = state.confirmPasswordError != null,
+                errorMessage = state.confirmPasswordError
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -141,10 +156,10 @@ fun RegisterScreen(
             AppButton(
                 text = stringResource(Res.string.register_button),
                 onClick = {
-
+                    viewModel.onIntent(RegisterIntent.Submit)
                 },
-                enabled = true,
-                isLoading = false,
+                enabled = state.isFormValid && !state.isLoading,
+                isLoading = state.isLoading,
                 fillMaxWidth = true
             )
 
