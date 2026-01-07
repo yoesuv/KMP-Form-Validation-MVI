@@ -14,12 +14,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yoesuv.kmpformvalidationmvi.feature.components.AppButton
 import com.yoesuv.kmpformvalidationmvi.feature.components.AppPasswordField
 import com.yoesuv.kmpformvalidationmvi.feature.components.AppTextField
@@ -42,12 +45,21 @@ import org.jetbrains.compose.resources.stringResource
 fun LoginScreen(
     onNavigateToRegister: () -> Unit = {},
 ) {
-
     // Get string resources once in the Composable context
     val emailRequiredMessage = stringResource(Res.string.email_required)
     val emailInvalidMessage = stringResource(Res.string.email_invalid_format)
     val passwordRequiredMessage = stringResource(Res.string.password_required)
     val passwordTooShortMessage = stringResource(Res.string.password_too_short)
+
+    val viewModel: LoginViewModel = viewModel {
+        LoginViewModel(
+            emailRequiredMessage = emailRequiredMessage,
+            emailInvalidMessage = emailInvalidMessage,
+            passwordRequiredMessage = passwordRequiredMessage,
+            passwordTooShortMessage = passwordTooShortMessage
+        )
+    }
+    val state by viewModel.state.collectAsState()
 
     Scaffold { paddingValues ->
         Box(
@@ -75,28 +87,29 @@ fun LoginScreen(
 
                 // Email Field with Validation
                 AppTextField(
-                    value = "",
+                    value = state.email,
                     onValueChange = { newEmail ->
-
+                        viewModel.onIntent(LoginIntent.EmailChanged(newEmail))
                     },
                     label = stringResource(Res.string.email_label),
                     placeholder = stringResource(Res.string.email_placeholder),
                     keyboardType = KeyboardType.Email,
-                    isError = false,
-                    errorMessage = null
+                    isError = state.emailError != null,
+                    errorMessage = state.emailError
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Password Field
                 AppPasswordField(
-                    value = "",
+                    value = state.password,
                     onValueChange = { newPassword ->
+                        viewModel.onIntent(LoginIntent.PasswordChanged(newPassword))
                     },
                     label = stringResource(Res.string.password_label),
                     placeholder = stringResource(Res.string.password_placeholder),
-                    isError = false,
-                    errorMessage = null
+                    isError = state.passwordError != null,
+                    errorMessage = state.passwordError
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -105,11 +118,11 @@ fun LoginScreen(
                 AppButton(
                     text = stringResource(Res.string.login_button),
                     onClick = {
-                        onNavigateToRegister()
+                        viewModel.onIntent(LoginIntent.Submit)
                     },
                     fillMaxWidth = true,
-                    isLoading = false,
-                    enabled = true
+                    isLoading = state.isLoading,
+                    enabled = state.isFormValid && !state.isLoading
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
