@@ -26,13 +26,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yoesuv.kmpformvalidationmvi.feature.components.AppButton
 import com.yoesuv.kmpformvalidationmvi.feature.components.AppPasswordField
 import com.yoesuv.kmpformvalidationmvi.feature.components.AppTextField
+import com.yoesuv.kmpformvalidationmvi.utils.validation.ValidationLoginErrorMessages
 import kmpformvalidationmvi.composeapp.generated.resources.Res
 import kmpformvalidationmvi.composeapp.generated.resources.create_account_link
 import kmpformvalidationmvi.composeapp.generated.resources.dont_have_account
+import kmpformvalidationmvi.composeapp.generated.resources.email_invalid_format
 import kmpformvalidationmvi.composeapp.generated.resources.email_label
 import kmpformvalidationmvi.composeapp.generated.resources.email_placeholder
 import kmpformvalidationmvi.composeapp.generated.resources.email_required
-import kmpformvalidationmvi.composeapp.generated.resources.email_invalid_format
 import kmpformvalidationmvi.composeapp.generated.resources.login_button
 import kmpformvalidationmvi.composeapp.generated.resources.login_title
 import kmpformvalidationmvi.composeapp.generated.resources.password_label
@@ -45,19 +46,15 @@ import org.jetbrains.compose.resources.stringResource
 fun LoginScreen(
     onNavigateToRegister: () -> Unit = {},
 ) {
-    // Get string resources once in the Composable context
-    val emailRequiredMessage = stringResource(Res.string.email_required)
-    val emailInvalidMessage = stringResource(Res.string.email_invalid_format)
-    val passwordRequiredMessage = stringResource(Res.string.password_required)
-    val passwordTooShortMessage = stringResource(Res.string.password_too_short)
+    val errorMessages = ValidationLoginErrorMessages(
+        emailRequired = stringResource(Res.string.email_required),
+        emailInvalid = stringResource(Res.string.email_invalid_format),
+        passwordRequired = stringResource(Res.string.password_required),
+        passwordTooShort = stringResource(Res.string.password_too_short)
+    )
 
     val viewModel: LoginViewModel = viewModel {
-        LoginViewModel(
-            emailRequiredMessage = emailRequiredMessage,
-            emailInvalidMessage = emailInvalidMessage,
-            passwordRequiredMessage = passwordRequiredMessage,
-            passwordTooShortMessage = passwordTooShortMessage
-        )
+        LoginViewModel(errorMessages)
     }
     val state by viewModel.state.collectAsState()
 
