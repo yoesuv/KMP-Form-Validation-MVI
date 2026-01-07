@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Login Screen -->
+    <string name="login_title">Login</string>
+    <string name="email_label">Email</string>
+    <string name="email_placeholder">Enter your email</string>
+    <string name="password_label">Password</string>
+    <string name="password_placeholder">Enter your password</string>
+    <string name="login_button">Login</string>
+    <string name="dont_have_account">Don't have an account?</string>
+    <string name="create_account_link">Create Account</string>
+
+    <!-- Register Screen -->
+    <string name="register_title">Create Account</string>
+    <string name="full_name_label">Full Name</string>
+    <string name="full_name_placeholder">Enter your full name</string>
+    <string name="confirm_password_label">Confirm Password</string>
+    <string name="confirm_password_placeholder">Confirm your password</string>
+    <string name="register_button">Create Account</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="login_link">Login</string>
+
+    <!-- Validation Messages -->
+    <string name="email_required">Email is required</string>
+    <string name="email_invalid_format">Email format is not valid</string>
+    <string name="password_required">Password is required</string>
+    <string name="password_too_short">Password must be at least 5 characters</string>
+    <string name="full_name_required">Full name is required</string>
+    <string name="full_name_too_short">Full name must be at least 2 characters</string>
+    <string name="confirm_password_required">Confirm password is required</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+</resources>

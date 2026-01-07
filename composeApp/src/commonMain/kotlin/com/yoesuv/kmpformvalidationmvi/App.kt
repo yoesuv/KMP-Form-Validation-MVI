@@ -21,7 +21,9 @@ fun App() {
             startDestination = AppRoute.Login
         ) {
             composable<AppRoute.Login> {
-                LoginScreen()
+                LoginScreen(onNavigateToRegister = {
+                    navController.navigate(AppRoute.Register)
+                })
             }
             composable<AppRoute.Register> {
                 RegisterScreen()
