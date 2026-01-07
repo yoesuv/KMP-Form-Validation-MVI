@@ -1,6 +1,7 @@
 package com.yoesuv.kmpformvalidationmvi.feature.register
 
 import androidx.lifecycle.ViewModel
+import com.yoesuv.kmpformvalidationmvi.utils.validation.ValidationRegisterErrorMessages
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validateConfirmPassword
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validateEmail
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validateFullName
@@ -11,14 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class RegisterViewModel(
-    private val fullNameRequiredMessage: String,
-    private val fullNameTooShortMessage: String,
-    private val emailRequiredMessage: String,
-    private val emailInvalidMessage: String,
-    private val passwordRequiredMessage: String,
-    private val passwordTooShortMessage: String,
-    private val confirmPasswordRequiredMessage: String,
-    private val passwordsDoNotMatchMessage: String
+    private val errorMessages: ValidationRegisterErrorMessages
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RegisterState())
@@ -35,7 +29,10 @@ class RegisterViewModel(
     }
 
     private fun handleFullNameChanged(fullName: String) {
-        val fullNameValidation = fullName.validateFullName(fullNameRequiredMessage, fullNameTooShortMessage)
+        val fullNameValidation = fullName.validateFullName(
+            errorMessages.fullNameRequired,
+            errorMessages.fullNameTooShort
+        )
         _state.update { currentState ->
             currentState.copy(
                 fullName = fullName,
@@ -51,7 +48,8 @@ class RegisterViewModel(
     }
 
     private fun handleEmailChanged(email: String) {
-        val emailValidation = email.validateEmail(emailRequiredMessage, emailInvalidMessage)
+        val emailValidation =
+            email.validateEmail(errorMessages.emailRequired, errorMessages.emailInvalid)
         _state.update { currentState ->
             currentState.copy(
                 email = email,
@@ -67,14 +65,17 @@ class RegisterViewModel(
     }
 
     private fun handlePasswordChanged(password: String) {
-        val passwordValidation = password.validatePassword(passwordRequiredMessage, passwordTooShortMessage)
+        val passwordValidation = password.validatePassword(
+            errorMessages.passwordRequired,
+            errorMessages.passwordTooShort
+        )
         val currentState = _state.value
         val confirmPasswordValidation = currentState.confirmPassword.validateConfirmPassword(
             originalPassword = password,
-            confirmPasswordRequiredMessage = confirmPasswordRequiredMessage,
-            passwordsDoNotMatchMessage = passwordsDoNotMatchMessage
+            confirmPasswordRequiredMessage = errorMessages.confirmPasswordRequired,
+            passwordsDoNotMatchMessage = errorMessages.passwordsDoNotMatch
         )
-        
+
         _state.update {
             it.copy(
                 password = password,
@@ -96,10 +97,10 @@ class RegisterViewModel(
         val currentState = _state.value
         val confirmPasswordValidation = confirmPassword.validateConfirmPassword(
             originalPassword = currentState.password,
-            confirmPasswordRequiredMessage = confirmPasswordRequiredMessage,
-            passwordsDoNotMatchMessage = passwordsDoNotMatchMessage
+            confirmPasswordRequiredMessage = errorMessages.confirmPasswordRequired,
+            passwordsDoNotMatchMessage = errorMessages.passwordsDoNotMatch
         )
-        
+
         _state.update {
             it.copy(
                 confirmPassword = confirmPassword,
@@ -117,17 +118,27 @@ class RegisterViewModel(
     private fun handleSubmit() {
         val currentState = _state.value
 
-        val fullNameValidation = currentState.fullName.validateFullName(fullNameRequiredMessage, fullNameTooShortMessage)
-        val emailValidation = currentState.email.validateEmail(emailRequiredMessage, emailInvalidMessage)
-        val passwordValidation = currentState.password.validatePassword(passwordRequiredMessage, passwordTooShortMessage)
+        val fullNameValidation = currentState.fullName.validateFullName(
+            errorMessages.fullNameRequired,
+            errorMessages.fullNameTooShort
+        )
+        val emailValidation = currentState.email.validateEmail(
+            errorMessages.emailRequired,
+            errorMessages.emailInvalid
+        )
+        val passwordValidation = currentState.password.validatePassword(
+            errorMessages.passwordRequired,
+            errorMessages.passwordTooShort
+        )
         val confirmPasswordValidation = currentState.confirmPassword.validateConfirmPassword(
             originalPassword = currentState.password,
-            confirmPasswordRequiredMessage = confirmPasswordRequiredMessage,
-            passwordsDoNotMatchMessage = passwordsDoNotMatchMessage
+            confirmPasswordRequiredMessage = errorMessages.confirmPasswordRequired,
+            passwordsDoNotMatchMessage = errorMessages.passwordsDoNotMatch
         )
 
-        if (!fullNameValidation.isValid || !emailValidation.isValid || 
-            !passwordValidation.isValid || !confirmPasswordValidation.isValid) {
+        if (!fullNameValidation.isValid || !emailValidation.isValid ||
+            !passwordValidation.isValid || !confirmPasswordValidation.isValid
+        ) {
             _state.update {
                 it.copy(
                     fullNameError = if (fullNameValidation.isValid) null else fullNameValidation.message,
@@ -149,18 +160,25 @@ class RegisterViewModel(
         password: String,
         confirmPassword: String
     ): Boolean {
-        val fullNameValidation = fullName.validateFullName(fullNameRequiredMessage, fullNameTooShortMessage)
-        val emailValidation = email.validateEmail(emailRequiredMessage, emailInvalidMessage)
-        val passwordValidation = password.validatePassword(passwordRequiredMessage, passwordTooShortMessage)
+        val fullNameValidation = fullName.validateFullName(
+            errorMessages.fullNameRequired,
+            errorMessages.fullNameTooShort
+        )
+        val emailValidation =
+            email.validateEmail(errorMessages.emailRequired, errorMessages.emailInvalid)
+        val passwordValidation = password.validatePassword(
+            errorMessages.passwordRequired,
+            errorMessages.passwordTooShort
+        )
         val confirmPasswordValidation = confirmPassword.validateConfirmPassword(
             originalPassword = password,
-            confirmPasswordRequiredMessage = confirmPasswordRequiredMessage,
-            passwordsDoNotMatchMessage = passwordsDoNotMatchMessage
+            confirmPasswordRequiredMessage = errorMessages.confirmPasswordRequired,
+            passwordsDoNotMatchMessage = errorMessages.passwordsDoNotMatch
         )
-        
-        return fullNameValidation.isValid && 
-               emailValidation.isValid && 
-               passwordValidation.isValid && 
-               confirmPasswordValidation.isValid
+
+        return fullNameValidation.isValid &&
+                emailValidation.isValid &&
+                passwordValidation.isValid &&
+                confirmPasswordValidation.isValid
     }
 }
