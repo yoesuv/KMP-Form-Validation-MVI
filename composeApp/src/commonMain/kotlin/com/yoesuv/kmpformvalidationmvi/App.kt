@@ -26,7 +26,9 @@ fun App() {
                 })
             }
             composable<AppRoute.Register> {
-                RegisterScreen()
+                RegisterScreen(onNavigateBack = {
+                    navController.navigateUp()
+                })
             }
         }
     }
