@@ -1,13 +1,19 @@
 package com.yoesuv.kmpformvalidationmvi.feature.login
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yoesuv.kmpformvalidationmvi.utils.validation.ValidationLoginErrorMessages
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validateEmail
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validatePassword
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val errorMessages: ValidationLoginErrorMessages
@@ -15,6 +21,9 @@ class LoginViewModel(
 
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
+
+    private val _events = MutableSharedFlow<String>()
+    val events: SharedFlow<String> = _events.asSharedFlow()
 
     fun onIntent(intent: LoginIntent) {
         when (intent) {
@@ -53,6 +62,8 @@ class LoginViewModel(
     private fun handleSubmit() {
         val currentState = _state.value
 
+        if (currentState.isLoading) return
+
         val emailValidation = currentState.email.validateEmail(
             errorMessages.emailRequired,
             errorMessages.emailInvalid
@@ -73,7 +84,12 @@ class LoginViewModel(
         }
 
         _state.update { it.copy(isLoading = true) }
-        // TODO: Implement actual login logic here
+
+        viewModelScope.launch {
+            delay(3_000)
+            _state.update { it.copy(isLoading = false) }
+            _events.emit("Login success")
+        }
     }
 
     private fun checkFormValidity(email: String, password: String): Boolean {

@@ -1,15 +1,21 @@
 package com.yoesuv.kmpformvalidationmvi.feature.register
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yoesuv.kmpformvalidationmvi.utils.validation.ValidationRegisterErrorMessages
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validateConfirmPassword
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validateEmail
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validateFullName
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validatePassword
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class RegisterViewModel(
     private val errorMessages: ValidationRegisterErrorMessages
@@ -17,6 +23,9 @@ class RegisterViewModel(
 
     private val _state = MutableStateFlow(RegisterState())
     val state: StateFlow<RegisterState> = _state.asStateFlow()
+
+    private val _events = MutableSharedFlow<String>()
+    val events: SharedFlow<String> = _events.asSharedFlow()
 
     fun onIntent(intent: RegisterIntent) {
         when (intent) {
@@ -118,6 +127,8 @@ class RegisterViewModel(
     private fun handleSubmit() {
         val currentState = _state.value
 
+        if (currentState.isLoading) return
+
         val fullNameValidation = currentState.fullName.validateFullName(
             errorMessages.fullNameRequired,
             errorMessages.fullNameTooShort
@@ -151,7 +162,12 @@ class RegisterViewModel(
         }
 
         _state.update { it.copy(isLoading = true) }
-        // TODO: Implement actual registration logic here
+
+        viewModelScope.launch {
+            delay(3_000)
+            _state.update { it.copy(isLoading = false) }
+            _events.emit("Register success")
+        }
     }
 
     private fun checkFormValidity(
