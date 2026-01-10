@@ -40,6 +40,7 @@ import kmpformvalidationmvi.composeapp.generated.resources.email_placeholder
 import kmpformvalidationmvi.composeapp.generated.resources.email_required
 import kmpformvalidationmvi.composeapp.generated.resources.login_button
 import kmpformvalidationmvi.composeapp.generated.resources.login_title
+import kmpformvalidationmvi.composeapp.generated.resources.app_name
 import kmpformvalidationmvi.composeapp.generated.resources.password_label
 import kmpformvalidationmvi.composeapp.generated.resources.password_placeholder
 import kmpformvalidationmvi.composeapp.generated.resources.password_required
@@ -158,6 +159,15 @@ fun LoginScreen(
                     }
                 }
             }
+
+            Text(
+                text = stringResource(Res.string.app_name),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 16.dp),
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
