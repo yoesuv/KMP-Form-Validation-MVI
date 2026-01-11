@@ -1,35 +1,14 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+## KMP Form Validation MVI ##
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Build basic Kotlin Multiplatform validation Login and Register using Model View Intent (MVI) Architecture.  
+version MVVM [click here](https://github.com/yoesuv/KMP-Form-Validation)
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+#### Screenshot iOS ####
+| ![](https://images2.imgbox.com/22/76/FqCXyHZT_o.png) | ![](https://images2.imgbox.com/7c/2c/STEN4WB6_o.png) | ![](https://images2.imgbox.com/7b/9b/vSHdxK07_o.png) | ![](https://images2.imgbox.com/ea/51/BZYaHQw5_o.png) |
+| :---: | :---: | :---: | :---: |
+| ![](https://images2.imgbox.com/18/12/FDR3q8OO_o.png) | ![](https://images2.imgbox.com/b0/23/aJEvfxf4_o.png) | ![](https://images2.imgbox.com/4e/d6/lI2QX03G_o.png) | ![](https://images2.imgbox.com/6e/49/UylSfloD_o.png) |
 
-### Build and Run Android Application
-
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
-
-### Build and Run iOS Application
-
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
-
----
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+#### List Library ####
+- [KotlinX Serialization](https://github.com/Kotlin/kotlinx.serialization)
+- [Navigation](https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose)
+- [Material Icons](https://mvnrepository.com/artifact/org.jetbrains.compose.material/material-icons-extended)
