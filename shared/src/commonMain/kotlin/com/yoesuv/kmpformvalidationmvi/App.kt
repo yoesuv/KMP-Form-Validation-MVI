@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.yoesuv.kmpformvalidationmvi.core.route.AppRoute
 import com.yoesuv.kmpformvalidationmvi.feature.login.LoginScreen
 import com.yoesuv.kmpformvalidationmvi.feature.register.RegisterScreen
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
