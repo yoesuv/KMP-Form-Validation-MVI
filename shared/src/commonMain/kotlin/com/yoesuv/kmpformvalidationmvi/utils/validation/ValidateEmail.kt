@@ -1,5 +1,7 @@
 package com.yoesuv.kmpformvalidationmvi.utils.validation
 
+private val EMAIL_REGEX = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
+
 /**
  * Extension function to validate email format with string parameters
  * @param emailRequiredMessage Message to show when email is required
@@ -37,10 +39,4 @@ fun String.validateEmail(
  * Helper function to check email format using regex
  * @return true if email format is valid, false otherwise
  */
-private fun String.isValidEmailFormat(): Boolean {
-    val emailRegex =
-        Regex(
-            pattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-        )
-    return emailRegex.matches(this)
-}
+private fun String.isValidEmailFormat(): Boolean = EMAIL_REGEX.matches(this)
