@@ -10,22 +10,27 @@ package com.yoesuv.kmpformvalidationmvi.utils.validation
 fun String.validateConfirmPassword(
     originalPassword: String,
     confirmPasswordRequiredMessage: String,
-    passwordsDoNotMatchMessage: String
-): ValidationModel {
-    return when {
-        this.isBlank() -> ValidationModel(
-            isValid = false,
-            message = confirmPasswordRequiredMessage
-        )
+    passwordsDoNotMatchMessage: String,
+): ValidationModel =
+    when {
+        this.isBlank() -> {
+            ValidationModel(
+                isValid = false,
+                message = confirmPasswordRequiredMessage,
+            )
+        }
 
-        this != originalPassword -> ValidationModel(
-            isValid = false,
-            message = passwordsDoNotMatchMessage
-        )
+        this != originalPassword -> {
+            ValidationModel(
+                isValid = false,
+                message = passwordsDoNotMatchMessage,
+            )
+        }
 
-        else -> ValidationModel(
-            isValid = true,
-            message = ""
-        )
+        else -> {
+            ValidationModel(
+                isValid = true,
+                message = "",
+            )
+        }
     }
-}

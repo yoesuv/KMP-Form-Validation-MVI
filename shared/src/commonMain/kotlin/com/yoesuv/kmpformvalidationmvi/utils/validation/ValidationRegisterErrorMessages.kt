@@ -8,5 +8,5 @@ data class ValidationRegisterErrorMessages(
     val passwordRequired: String,
     val passwordTooShort: String,
     val confirmPasswordRequired: String,
-    val passwordsDoNotMatch: String
+    val passwordsDoNotMatch: String,
 )

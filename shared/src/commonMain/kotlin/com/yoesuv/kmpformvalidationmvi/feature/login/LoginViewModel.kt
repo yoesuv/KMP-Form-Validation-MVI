@@ -6,19 +6,18 @@ import com.yoesuv.kmpformvalidationmvi.utils.validation.ValidationLoginErrorMess
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validateEmail
 import com.yoesuv.kmpformvalidationmvi.utils.validation.validatePassword
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val errorMessages: ValidationLoginErrorMessages
+    private val errorMessages: ValidationLoginErrorMessages,
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
 
@@ -40,21 +39,22 @@ class LoginViewModel(
             currentState.copy(
                 email = email,
                 emailError = if (emailValidation.isValid) null else emailValidation.message,
-                isFormValid = checkFormValidity(email, currentState.password)
+                isFormValid = checkFormValidity(email, currentState.password),
             )
         }
     }
 
     private fun handlePasswordChanged(password: String) {
-        val passwordValidation = password.validatePassword(
-            errorMessages.passwordRequired,
-            errorMessages.passwordTooShort
-        )
+        val passwordValidation =
+            password.validatePassword(
+                errorMessages.passwordRequired,
+                errorMessages.passwordTooShort,
+            )
         _state.update { currentState ->
             currentState.copy(
                 password = password,
                 passwordError = if (passwordValidation.isValid) null else passwordValidation.message,
-                isFormValid = checkFormValidity(currentState.email, password)
+                isFormValid = checkFormValidity(currentState.email, password),
             )
         }
     }
@@ -64,20 +64,22 @@ class LoginViewModel(
 
         if (currentState.isLoading) return
 
-        val emailValidation = currentState.email.validateEmail(
-            errorMessages.emailRequired,
-            errorMessages.emailInvalid
-        )
-        val passwordValidation = currentState.password.validatePassword(
-            errorMessages.passwordRequired,
-            errorMessages.passwordTooShort
-        )
+        val emailValidation =
+            currentState.email.validateEmail(
+                errorMessages.emailRequired,
+                errorMessages.emailInvalid,
+            )
+        val passwordValidation =
+            currentState.password.validatePassword(
+                errorMessages.passwordRequired,
+                errorMessages.passwordTooShort,
+            )
 
         if (!emailValidation.isValid || !passwordValidation.isValid) {
             _state.update {
                 it.copy(
                     emailError = if (emailValidation.isValid) null else emailValidation.message,
-                    passwordError = if (passwordValidation.isValid) null else passwordValidation.message
+                    passwordError = if (passwordValidation.isValid) null else passwordValidation.message,
                 )
             }
             return
@@ -92,13 +94,17 @@ class LoginViewModel(
         }
     }
 
-    private fun checkFormValidity(email: String, password: String): Boolean {
+    private fun checkFormValidity(
+        email: String,
+        password: String,
+    ): Boolean {
         val emailValidation =
             email.validateEmail(errorMessages.emailRequired, errorMessages.emailInvalid)
-        val passwordValidation = password.validatePassword(
-            errorMessages.passwordRequired,
-            errorMessages.passwordTooShort
-        )
+        val passwordValidation =
+            password.validatePassword(
+                errorMessages.passwordRequired,
+                errorMessages.passwordTooShort,
+            )
         return emailValidation.isValid && passwordValidation.isValid
     }
 }

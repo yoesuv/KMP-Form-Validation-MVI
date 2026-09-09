@@ -32,6 +32,7 @@ import com.yoesuv.kmpformvalidationmvi.feature.components.AppPasswordField
 import com.yoesuv.kmpformvalidationmvi.feature.components.AppTextField
 import com.yoesuv.kmpformvalidationmvi.utils.validation.ValidationLoginErrorMessages
 import kmpformvalidationmvi.shared.generated.resources.Res
+import kmpformvalidationmvi.shared.generated.resources.app_name
 import kmpformvalidationmvi.shared.generated.resources.create_account_link
 import kmpformvalidationmvi.shared.generated.resources.dont_have_account
 import kmpformvalidationmvi.shared.generated.resources.email_invalid_format
@@ -40,7 +41,6 @@ import kmpformvalidationmvi.shared.generated.resources.email_placeholder
 import kmpformvalidationmvi.shared.generated.resources.email_required
 import kmpformvalidationmvi.shared.generated.resources.login_button
 import kmpformvalidationmvi.shared.generated.resources.login_title
-import kmpformvalidationmvi.shared.generated.resources.app_name
 import kmpformvalidationmvi.shared.generated.resources.password_label
 import kmpformvalidationmvi.shared.generated.resources.password_placeholder
 import kmpformvalidationmvi.shared.generated.resources.password_required
@@ -49,19 +49,19 @@ import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun LoginScreen(
-    onNavigateToRegister: () -> Unit = {},
-) {
-    val errorMessages = ValidationLoginErrorMessages(
-        emailRequired = stringResource(Res.string.email_required),
-        emailInvalid = stringResource(Res.string.email_invalid_format),
-        passwordRequired = stringResource(Res.string.password_required),
-        passwordTooShort = stringResource(Res.string.password_too_short)
-    )
+fun LoginScreen(onNavigateToRegister: () -> Unit = {}) {
+    val errorMessages =
+        ValidationLoginErrorMessages(
+            emailRequired = stringResource(Res.string.email_required),
+            emailInvalid = stringResource(Res.string.email_invalid_format),
+            passwordRequired = stringResource(Res.string.password_required),
+            passwordTooShort = stringResource(Res.string.password_too_short),
+        )
 
-    val viewModel: LoginViewModel = viewModel {
-        LoginViewModel(errorMessages)
-    }
+    val viewModel: LoginViewModel =
+        viewModel {
+            LoginViewModel(errorMessages)
+        }
     val state by viewModel.state.collectAsState()
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -73,27 +73,29 @@ fun LoginScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+            contentAlignment = Alignment.Center,
         ) {
             Column(
-                modifier = Modifier
-                    .widthIn(max = 400.dp)
-                    .padding(24.dp),
+                modifier =
+                    Modifier
+                        .widthIn(max = 400.dp)
+                        .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 // Title
                 Text(
                     text = stringResource(Res.string.login_title),
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -108,7 +110,7 @@ fun LoginScreen(
                     placeholder = stringResource(Res.string.email_placeholder),
                     keyboardType = KeyboardType.Email,
                     isError = state.emailError != null,
-                    errorMessage = state.emailError
+                    errorMessage = state.emailError,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -122,7 +124,7 @@ fun LoginScreen(
                     label = stringResource(Res.string.password_label),
                     placeholder = stringResource(Res.string.password_placeholder),
                     isError = state.passwordError != null,
-                    errorMessage = state.passwordError
+                    errorMessage = state.passwordError,
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -135,7 +137,7 @@ fun LoginScreen(
                     },
                     fillMaxWidth = true,
                     isLoading = state.isLoading,
-                    enabled = state.isFormValid && !state.isLoading
+                    enabled = state.isFormValid && !state.isLoading,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -143,18 +145,18 @@ fun LoginScreen(
                 // Navigation to Register
                 Row(
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = stringResource(Res.string.dont_have_account),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                     TextButton(
-                        onClick = onNavigateToRegister
+                        onClick = onNavigateToRegister,
                     ) {
                         Text(
                             text = stringResource(Res.string.create_account_link),
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
                 }
@@ -162,11 +164,12 @@ fun LoginScreen(
 
             Text(
                 text = stringResource(Res.string.app_name),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 16.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 16.dp),
                 style = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }

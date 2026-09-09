@@ -8,22 +8,27 @@ package com.yoesuv.kmpformvalidationmvi.utils.validation
  */
 fun String.validatePassword(
     passwordRequiredMessage: String,
-    passwordTooShortMessage: String
-): ValidationModel {
-    return when {
-        this.isBlank() -> ValidationModel(
-            isValid = false,
-            message = passwordRequiredMessage
-        )
+    passwordTooShortMessage: String,
+): ValidationModel =
+    when {
+        this.isBlank() -> {
+            ValidationModel(
+                isValid = false,
+                message = passwordRequiredMessage,
+            )
+        }
 
-        this.length < 5 -> ValidationModel(
-            isValid = false,
-            message = passwordTooShortMessage
-        )
+        this.length < 5 -> {
+            ValidationModel(
+                isValid = false,
+                message = passwordTooShortMessage,
+            )
+        }
 
-        else -> ValidationModel(
-            isValid = true,
-            message = ""
-        )
+        else -> {
+            ValidationModel(
+                isValid = true,
+                message = "",
+            )
+        }
     }
-}

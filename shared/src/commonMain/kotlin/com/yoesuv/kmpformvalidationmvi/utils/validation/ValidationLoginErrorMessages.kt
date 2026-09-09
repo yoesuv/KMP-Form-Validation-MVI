@@ -4,5 +4,5 @@ data class ValidationLoginErrorMessages(
     val emailRequired: String,
     val emailInvalid: String,
     val passwordRequired: String,
-    val passwordTooShort: String
+    val passwordTooShort: String,
 )

@@ -8,22 +8,27 @@ package com.yoesuv.kmpformvalidationmvi.utils.validation
  */
 fun String.validateFullName(
     fullNameRequiredMessage: String,
-    fullNameTooShortMessage: String
-): ValidationModel {
-    return when {
-        this.isBlank() -> ValidationModel(
-            isValid = false,
-            message = fullNameRequiredMessage
-        )
+    fullNameTooShortMessage: String,
+): ValidationModel =
+    when {
+        this.isBlank() -> {
+            ValidationModel(
+                isValid = false,
+                message = fullNameRequiredMessage,
+            )
+        }
 
-        this.trim().length < 2 -> ValidationModel(
-            isValid = false,
-            message = fullNameTooShortMessage
-        )
+        this.trim().length < 2 -> {
+            ValidationModel(
+                isValid = false,
+                message = fullNameTooShortMessage,
+            )
+        }
 
-        else -> ValidationModel(
-            isValid = true,
-            message = ""
-        )
+        else -> {
+            ValidationModel(
+                isValid = true,
+                message = "",
+            )
+        }
     }
-}

@@ -1,0 +1,23 @@
+root = true
+
+[*.{kt,kts}]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+max_line_length = 140
+trim_trailing_whitespace = true
+
+# KMP / Compose friendly naming:
+# Allow UpperCamelCase for @Composable functions (App, LoginScreen, AppButton, previews, ...)
+ktlint_function_naming_ignore_when_annotated_with = Composable
+
+# Generated code (Compose Resources in build/) uses lowercase names:
+# disable naming rules for that path only.
+[**/build/generated/**]
+ktlint_standard_class-naming = disabled
+ktlint_standard_function-naming = disabled
+
+# Or exclude generated code entirely via CLI negation patterns, e.g.
+#   ktlint "**/*.kt" "**/*.kts" "!**/build/**"

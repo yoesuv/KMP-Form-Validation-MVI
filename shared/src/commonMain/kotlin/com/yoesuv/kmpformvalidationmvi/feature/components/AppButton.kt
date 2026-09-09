@@ -29,19 +29,19 @@ import androidx.compose.ui.unit.dp
  * Button style variants for AppButton
  */
 enum class AppButtonStyle {
-    FILLED,      // Primary filled button
-    OUTLINED,    // Outlined button
-    TEXT,        // Text button
-    TONAL        // Filled tonal button
+    FILLED, // Primary filled button
+    OUTLINED, // Outlined button
+    TEXT, // Text button
+    TONAL, // Filled tonal button
 }
 
 /**
  * Button size variants for AppButton
  */
 enum class AppButtonSize {
-    SMALL,       // Compact size
-    MEDIUM,      // Default size
-    LARGE        // Larger size
+    SMALL, // Compact size
+    MEDIUM, // Default size
+    LARGE, // Larger size
 }
 
 /**
@@ -76,33 +76,41 @@ fun AppButton(
     trailingIcon: @Composable (() -> Unit)? = null,
     fillMaxWidth: Boolean = true,
     backgroundColor: Color? = null,
-    contentColor: Color? = null
+    contentColor: Color? = null,
 ) {
-    val buttonModifier = if (fillMaxWidth) {
-        modifier.fillMaxWidth()
-    } else {
-        modifier
-    }
+    val buttonModifier =
+        if (fillMaxWidth) {
+            modifier.fillMaxWidth()
+        } else {
+            modifier
+        }
 
-    val (height, contentPadding, textStyle) = when (size) {
-        AppButtonSize.SMALL -> Triple(
-            36.dp,
-            PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            MaterialTheme.typography.labelMedium
-        )
+    val (height, contentPadding, textStyle) =
+        when (size) {
+            AppButtonSize.SMALL -> {
+                Triple(
+                    36.dp,
+                    PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    MaterialTheme.typography.labelMedium,
+                )
+            }
 
-        AppButtonSize.MEDIUM -> Triple(
-            48.dp,
-            PaddingValues(horizontal = 24.dp, vertical = 12.dp),
-            MaterialTheme.typography.labelLarge
-        )
+            AppButtonSize.MEDIUM -> {
+                Triple(
+                    48.dp,
+                    PaddingValues(horizontal = 24.dp, vertical = 12.dp),
+                    MaterialTheme.typography.labelLarge,
+                )
+            }
 
-        AppButtonSize.LARGE -> Triple(
-            56.dp,
-            PaddingValues(horizontal = 32.dp, vertical = 16.dp),
-            MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
-        )
-    }
+            AppButtonSize.LARGE -> {
+                Triple(
+                    56.dp,
+                    PaddingValues(horizontal = 32.dp, vertical = 16.dp),
+                    MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                )
+            }
+        }
 
     val buttonContent: @Composable RowScope.() -> Unit = {
         ButtonContent(
@@ -110,25 +118,30 @@ fun AppButton(
             isLoading = isLoading,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
-            textStyle = textStyle
+            textStyle = textStyle,
         )
     }
 
-    val colors = when {
-        backgroundColor != null && contentColor != null -> ButtonDefaults.buttonColors(
-            containerColor = backgroundColor,
-            contentColor = contentColor,
-            disabledContainerColor = backgroundColor.copy(alpha = 0.12f),
-            disabledContentColor = contentColor.copy(alpha = 0.38f)
-        )
+    val colors =
+        when {
+            backgroundColor != null && contentColor != null -> {
+                ButtonDefaults.buttonColors(
+                    containerColor = backgroundColor,
+                    contentColor = contentColor,
+                    disabledContainerColor = backgroundColor.copy(alpha = 0.12f),
+                    disabledContentColor = contentColor.copy(alpha = 0.38f),
+                )
+            }
 
-        else -> when (style) {
-            AppButtonStyle.FILLED -> ButtonDefaults.buttonColors()
-            AppButtonStyle.OUTLINED -> ButtonDefaults.outlinedButtonColors()
-            AppButtonStyle.TEXT -> ButtonDefaults.textButtonColors()
-            AppButtonStyle.TONAL -> ButtonDefaults.filledTonalButtonColors()
+            else -> {
+                when (style) {
+                    AppButtonStyle.FILLED -> ButtonDefaults.buttonColors()
+                    AppButtonStyle.OUTLINED -> ButtonDefaults.outlinedButtonColors()
+                    AppButtonStyle.TEXT -> ButtonDefaults.textButtonColors()
+                    AppButtonStyle.TONAL -> ButtonDefaults.filledTonalButtonColors()
+                }
+            }
         }
-    }
 
     when (style) {
         AppButtonStyle.FILLED -> {
@@ -139,7 +152,7 @@ fun AppButton(
                 colors = colors,
                 contentPadding = contentPadding,
                 shape = RoundedCornerShape(12.dp),
-                content = buttonContent
+                content = buttonContent,
             )
         }
 
@@ -151,7 +164,7 @@ fun AppButton(
                 colors = colors,
                 contentPadding = contentPadding,
                 shape = RoundedCornerShape(12.dp),
-                content = buttonContent
+                content = buttonContent,
             )
         }
 
@@ -163,7 +176,7 @@ fun AppButton(
                 colors = colors,
                 contentPadding = contentPadding,
                 shape = RoundedCornerShape(12.dp),
-                content = buttonContent
+                content = buttonContent,
             )
         }
 
@@ -175,7 +188,7 @@ fun AppButton(
                 colors = colors,
                 contentPadding = contentPadding,
                 shape = RoundedCornerShape(12.dp),
-                content = buttonContent
+                content = buttonContent,
             )
         }
     }
@@ -187,16 +200,16 @@ private fun ButtonContent(
     isLoading: Boolean,
     leadingIcon: @Composable (() -> Unit)?,
     trailingIcon: @Composable (() -> Unit)?,
-    textStyle: androidx.compose.ui.text.TextStyle
+    textStyle: androidx.compose.ui.text.TextStyle,
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         if (isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(16.dp),
-                strokeWidth = 2.dp
+                strokeWidth = 2.dp,
             )
             if (text.isNotBlank()) {
                 Spacer(modifier = Modifier.width(8.dp))
@@ -209,7 +222,7 @@ private fun ButtonContent(
         if (text.isNotBlank()) {
             Text(
                 text = text,
-                style = textStyle
+                style = textStyle,
             )
         }
 
@@ -219,4 +232,3 @@ private fun ButtonContent(
         }
     }
 }
-
