@@ -13,11 +13,10 @@ trim_trailing_whitespace = true
 # Allow UpperCamelCase for @Composable functions (App, LoginScreen, AppButton, previews, ...)
 ktlint_function_naming_ignore_when_annotated_with = Composable
 
-# Generated code (Compose Resources in build/) uses lowercase names:
-# disable naming rules for that path only.
-[**/build/generated/**]
-ktlint_standard_class-naming = disabled
-ktlint_standard_function-naming = disabled
-
-# Or exclude generated code entirely via CLI negation patterns, e.g.
-#   ktlint "**/*.kt" "**/*.kts" "!**/build/**"
+# Generated code (Compose Resources, build intermediates, ...) lives under build/.
+# ktlint has no native "exclude paths" option; the documented way to skip a directory
+# is `ktlint = disabled` in a path section (see KtLint FAQ: "How do I disable ktlint
+# for generated code?" https://pinterest.github.io/ktlint/1.2.1/faq/).
+# Note: `**/build/**` (leading ** + single dir) is a supported glob form.
+[**/build/**]
+ktlint = disabled

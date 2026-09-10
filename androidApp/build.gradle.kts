@@ -3,6 +3,14 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeCompiler)
+    base
+}
+
+val appApplicationId = "com.yoesuv.kmpformvalidationmvi"
+val appVersionName = "1.0.1"
+
+base {
+    archivesName = "$appApplicationId-v$appVersionName"
 }
 
 kotlin {
@@ -10,6 +18,7 @@ kotlin {
         jvmTarget = JvmTarget.JVM_11
     }
 }
+
 dependencies {
     implementation(project(":shared"))
 
@@ -27,7 +36,7 @@ android {
             .toInt()
 
     defaultConfig {
-        applicationId = "com.yoesuv.kmpformvalidationmvi"
+        applicationId = appApplicationId
         minSdk =
             libs.versions.android.minSdk
                 .get()
@@ -37,7 +46,7 @@ android {
                 .get()
                 .toInt()
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = appVersionName
     }
     packaging {
         resources {
@@ -46,7 +55,8 @@ android {
     }
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",

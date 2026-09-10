@@ -1,21 +1,24 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# R8 rules for release builds (androidApp)
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# --- Readable crash traces ---
+# Keep line numbers, renamed to "SourceFile" so the mapping file
+# (build/outputs/mapping/release/mapping.txt) can de-obfuscate traces.
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# --- kotlinx.serialization ---
+# Library-embedded rules cover kotlinx.* internals; these keep the
+# generated serializers of our own @Serializable classes (navigation routes).
+-keepclassmembers class com.yoesuv.kmpformvalidationmvi.** {
+    *** Companion;
+}
+-keepclasseswithmembers class com.yoesuv.kmpformvalidationmvi.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+-keep,includedescriptorclasses class com.yoesuv.kmpformvalidationmvi.**$$serializer { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# --- Compose / MVI ---
+# Keep ViewModel instances created via viewModel() / reflection-free factories.
+-keepclassmembers class com.yoesuv.kmpformvalidationmvi.** extends androidx.lifecycle.ViewModel {
+    <init>(...);
+}
